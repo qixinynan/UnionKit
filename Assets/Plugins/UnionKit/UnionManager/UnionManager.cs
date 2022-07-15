@@ -9,13 +9,18 @@ public class UnionManager : MonoBehaviour
 {
     public static UnionManager instance;
 
+    /// <summary>
+    /// Allow debug output and other features or not
+    /// </summary>
     public bool debug = true;
-    public Dictionary<string, Manager> managersDict = new Dictionary<string, Manager>();
+
+    private Dictionary<string, Manager> managersDict = new Dictionary<string, Manager>();
 
 
     private void Awake()
     {
-        instance = this; // TODO Make instance more safe
+        // TODO Make instance more safe
+        instance = this;
     }
 
     private void Start()
@@ -23,6 +28,14 @@ public class UnionManager : MonoBehaviour
         LoadManagers();
         GetManager<TestManager>().hello();
         GetManager<GoodManager>().hello();
+    }
+
+    // UnionManager Script will be automatic mounted to new object named UnionManager when any scenes started
+    [RuntimeInitializeOnLoadMethod]
+    private static void OnSceneStarted()
+    {
+        new GameObject("UnionManager")
+            .AddComponent<UnionManager>();
     }
 
     private Manager CreateManagerByType(Type type)
@@ -46,6 +59,11 @@ public class UnionManager : MonoBehaviour
         UDebug.Debug(managerTypes.Count + " managers have loaded, it took " + takeTime + "ms");
     }
 
+    /// <summary>
+    /// Get manager's instance that based Manager class
+    /// </summary>
+    /// <typeparam name="T">the manager's type that based Manager</typeparam>
+    /// <returns>manager's instance</returns>
     public T GetManager<T>()
     {
         if (managersDict.ContainsKey(typeof(T).Name))
