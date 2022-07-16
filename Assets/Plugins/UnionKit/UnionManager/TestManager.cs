@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestManager : Manager
 {
-    public void hello()
+    public override void hello()
     {
         Debug.Log("Test Hello");
     }

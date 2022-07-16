@@ -25,6 +25,7 @@ public class UnionManager : MonoBehaviour
 
     private void Start()
     {
+        ShowWelcomeInfo();
         LoadManagers();
         GetManager<TestManager>().hello();
         GetManager<GoodManager>().hello();
@@ -37,6 +38,12 @@ public class UnionManager : MonoBehaviour
         new GameObject("UnionManager")
             .AddComponent<UnionManager>();
     }
+
+    private void ShowWelcomeInfo()
+    {
+        UDebug.Debug("Welcome to UnionKit, if you want to modify the setting of UnionKit ..."); // TODO setting of UnionManager
+    }
+
 
     private Manager CreateManagerByType(Type type)
     {
@@ -56,7 +63,7 @@ public class UnionManager : MonoBehaviour
         managerTypes.ForEach(type => managersDict.Add(type.Name, CreateManagerByType(type)));
 
         int takeTime = DateTime.Now.Subtract(startTime).Milliseconds;
-        UDebug.Debug(managerTypes.Count + " managers have loaded, it took " + takeTime + "ms");
+        UDebug.Debug(managerTypes.Count + " managers have been loaded, it took " + takeTime + "ms");
     }
 
     /// <summary>
