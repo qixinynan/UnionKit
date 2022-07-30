@@ -54,16 +54,21 @@ public class UnionManager : MonoBehaviour
     {
         UDebug.Debug("Loading managers");
         DateTime startTime = DateTime.Now;
-        Type typeofManager = typeof(Manager);
 
-        List<Type> managerTypes = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a => a.GetTypes().Where(t => t.BaseType == typeofManager))
-            .ToList();
+        List<Type> managerTypes = GetAllManagerTypes();
 
         managerTypes.ForEach(type => managersDict.Add(type.Name, CreateManagerByType(type)));
 
         int takeTime = DateTime.Now.Subtract(startTime).Milliseconds;
         UDebug.Debug(managerTypes.Count + " managers have been loaded, it took " + takeTime + "ms");
+    }
+
+    public static List<Type> GetAllManagerTypes()
+    {
+        Type typeofManager = typeof(Manager);
+        return AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(a => a.GetTypes().Where(t => t.BaseType == typeofManager))
+            .ToList();
     }
 
     /// <summary>
